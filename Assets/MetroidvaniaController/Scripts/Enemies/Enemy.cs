@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour {
 
 	private bool facingRight = true;
 	
-	public float speed = 5f;
+	public float speed = 1f;
 
 	public bool isInvincible = false;
 	private bool isHitted = false;
