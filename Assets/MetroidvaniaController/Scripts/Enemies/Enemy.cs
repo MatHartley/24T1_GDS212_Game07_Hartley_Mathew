@@ -12,11 +12,15 @@ public class Enemy : MonoBehaviour {
 	private Rigidbody2D rb;
 
 	private bool facingRight = true;
-	
+
 	public float speed = 1f;
 
 	public bool isInvincible = false;
 	private bool isHitted = false;
+
+	private float alertTime = 5f;
+	private float alertCount = 0f;
+	private bool isAlert = false;
 
 	void Awake () {
 		fallCheck = transform.Find("FallCheck");
@@ -85,6 +89,11 @@ public class Enemy : MonoBehaviour {
 			collision.gameObject.GetComponent<CharacterController2D>().ApplyDamage(2f, transform.position);
 		}
 	}
+
+	public void ToggleAlert()
+    {
+		isAlert = !isAlert;
+    }
 
 	IEnumerator HitTime()
 	{

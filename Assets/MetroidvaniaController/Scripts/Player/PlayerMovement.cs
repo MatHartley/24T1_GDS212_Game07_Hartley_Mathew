@@ -9,10 +9,11 @@ public class PlayerMovement : MonoBehaviour {
 
 	public float runSpeed = 40f;
 
-	float horizontalMove = 0f;
-	bool jump = false;
-	bool dash = false;
-
+	private float horizontalMove = 0f;
+	public bool jump = false;
+	public bool dash = false;
+	public bool run = false;
+	public bool sneak = false;
 	//bool dashAxis = false;
 	
 	// Update is called once per frame
@@ -62,6 +63,16 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		// Move our character
 		controller.Move(horizontalMove * Time.fixedDeltaTime, jump, dash);
+
+		if (horizontalMove != 0)
+		{
+			run = true;
+		}
+		else
+		{
+			run = false;
+		}
+
 		jump = false;
 		dash = false;
 	}
