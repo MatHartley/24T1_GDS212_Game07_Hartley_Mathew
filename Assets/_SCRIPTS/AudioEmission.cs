@@ -33,7 +33,7 @@ public class AudioEmission : MonoBehaviour
             runCircle.SetActive(false);
         }
 
-        if (playerMovement.jump || playerMovement.dash)
+        if (playerMovement.jump)
         {
             loudCircle.SetActive(true);
         }

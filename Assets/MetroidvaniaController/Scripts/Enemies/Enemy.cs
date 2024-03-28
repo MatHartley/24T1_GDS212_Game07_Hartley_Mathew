@@ -22,10 +22,10 @@ public class Enemy : MonoBehaviour {
 	private Transform wallCheck;
 
 	[Header("Alert")]
-
 	private float alertTime = 5f;
 	private float alertCount = 0f;
 	private bool isAlert = false;
+	private Transform alertTransform;
 
 	[Header("Player Reference")]
 	[SerializeField] GameObject player;
@@ -96,14 +96,14 @@ public class Enemy : MonoBehaviour {
 			rb.velocity = new Vector2(0, 0);
 			anim.SetBool("IsWaiting", true);
 
-			if (player.transform.position.x < transform.position.x)
+			if (alertTransform.position.x < transform.position.x)
 			{
 				Vector3 theScale = transform.localScale;
 				theScale.x = -1;
 				transform.localScale = theScale;
 				facingRight = true;
 			}
-			else if (player.transform.position.x > transform.position.x)
+			else if (alertTransform.position.x > transform.position.x)
 			{
 				Vector3 theScale = transform.localScale;
 				theScale.x = 1;
@@ -144,6 +144,7 @@ public class Enemy : MonoBehaviour {
 		if (collision.gameObject.tag == "Sound")
 		{
 			isAlert = true;
+			alertTransform = (player.transform);
 		}
 	}
 
