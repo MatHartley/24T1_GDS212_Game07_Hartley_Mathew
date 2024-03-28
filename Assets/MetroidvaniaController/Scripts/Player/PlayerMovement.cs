@@ -14,11 +14,13 @@ public class PlayerMovement : MonoBehaviour {
 	public bool dash = false;
 	public bool run = false;
 	public bool sneak = false;
-	//bool dashAxis = false;
-	
-	// Update is called once per frame
-	void Update () {
 
+	private float audioCooldown = 1f;
+	private float audioCount;
+
+	// Update is called once per frame
+	void Update()
+	{
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
 		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
@@ -27,26 +29,29 @@ public class PlayerMovement : MonoBehaviour {
 		{
 			jump = true;
 		}
+		else
+		{
+			audioCount += Time.deltaTime;
+			if (audioCount >= audioCooldown)
+			{
+				jump = false;
+				audioCount = 0;
+			}
+		}
 
 		if (Input.GetKeyDown(KeyCode.C))
 		{
 			dash = true;
 		}
-
-		/*if (Input.GetAxisRaw("Dash") == 1 || Input.GetAxisRaw("Dash") == -1) //RT in Unity 2017 = -1, RT in Unity 2019 = 1
-		{
-			if (dashAxis == false)
-			{
-				dashAxis = true;
-				dash = true;
-			}
-		}
 		else
 		{
-			dashAxis = false;
+			audioCount += Time.deltaTime;
+			if (audioCount >= audioCooldown)
+			{
+				dash = false;
+				audioCount = 0;
+			}
 		}
-		*/
-
 	}
 
 	public void OnFall()
@@ -72,8 +77,5 @@ public class PlayerMovement : MonoBehaviour {
 		{
 			run = false;
 		}
-
-		jump = false;
-		dash = false;
 	}
 }

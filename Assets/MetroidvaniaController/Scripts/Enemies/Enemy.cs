@@ -4,7 +4,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
 	public float life = 10;
-	private bool isPlat;
+	private bool isPlatform;
 	private bool isObstacle;
 	private Transform fallCheck;
 	private Transform wallCheck;
@@ -22,26 +22,41 @@ public class Enemy : MonoBehaviour {
 	private float alertCount = 0f;
 	private bool isAlert = false;
 
-	void Awake () {
+	void Awake () 
+	{
 		fallCheck = transform.Find("FallCheck");
 		wallCheck = transform.Find("WallCheck");
 		rb = GetComponent<Rigidbody2D>();
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
 
+    // Update is called once per frame
+    private void Update()
+    {
+        if (isAlert)
+        {
+			alertCount += Time.deltaTime;
+			Debug.Log(this.name + ": Alert:" + alertCount);
+			if (alertCount >= alertTime)
+			{
+				isAlert = false;
+				alertCount = 0f;
+			}
+        }
+    }
+
+    void FixedUpdate () 
+	{
 		if (life <= 0) {
 			transform.GetComponent<Animator>().SetBool("IsDead", true);
 			StartCoroutine(DestroyEnemy());
 		}
 
-		isPlat = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
+		isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
 		isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
 
 		if (!isHitted && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
 		{
-			if (isPlat && !isObstacle && !isHitted)
+			if (isPlatform && !isObstacle && !isHitted)
 			{
 				if (facingRight)
 				{
@@ -59,7 +74,8 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	void Flip (){
+	void Flip ()
+	{
 		// Switch the way the player is labelled as facing.
 		facingRight = !facingRight;
 		
@@ -69,7 +85,8 @@ public class Enemy : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
-	public void ApplyDamage(float damage) {
+	public void ApplyDamage(float damage) 
+	{
 		if (!isInvincible) 
 		{
 			float direction = damage / Mathf.Abs(damage);
@@ -82,18 +99,21 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+		if (collision.gameObject.tag == "Sound")
+		{
+			isAlert = true;
+		}
+	}
+
+    void OnCollisionStay2D(Collision2D collision)
 	{
 		if (collision.gameObject.tag == "Player" && life > 0)
 		{
 			collision.gameObject.GetComponent<CharacterController2D>().ApplyDamage(2f, transform.position);
 		}
 	}
-
-	public void ToggleAlert()
-    {
-		isAlert = !isAlert;
-    }
 
 	IEnumerator HitTime()
 	{
