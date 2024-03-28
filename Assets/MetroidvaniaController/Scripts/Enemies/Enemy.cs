@@ -3,26 +3,40 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+	[Header("Enemy Attributes")]
 	public float life = 10;
+	public float speed = 1f;
+	public bool isInvincible = false;
+
+	private bool isHit = false;
+	private bool facingRight = true; 
+	private Rigidbody2D rb;
+	private Animator anim;
+
+	[Header("Patrol Checks")]
+	public LayerMask turnLayerMask;
+
 	private bool isPlatform;
 	private bool isObstacle;
 	private Transform fallCheck;
 	private Transform wallCheck;
-	public LayerMask turnLayerMask;
-	private Rigidbody2D rb;
 
-	private bool facingRight = true;
-
-	public float speed = 1f;
-
-	public bool isInvincible = false;
-	private bool isHitted = false;
+	[Header("Alert")]
 
 	private float alertTime = 5f;
 	private float alertCount = 0f;
 	private bool isAlert = false;
 
-	void Awake () 
+	[Header("Player Reference")]
+	[SerializeField] GameObject player;
+
+	private void Start()
+    {
+		anim = GetComponent<Animator>();
+		player = GameObject.Find("PlayerCharacter");
+	}
+
+    void Awake () 
 	{
 		fallCheck = transform.Find("FallCheck");
 		wallCheck = transform.Find("WallCheck");
@@ -46,31 +60,57 @@ public class Enemy : MonoBehaviour {
 
     void FixedUpdate () 
 	{
-		if (life <= 0) {
-			transform.GetComponent<Animator>().SetBool("IsDead", true);
-			StartCoroutine(DestroyEnemy());
-		}
-
-		isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
-		isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
-
-		if (!isHitted && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
+		if (!isAlert)
 		{
-			if (isPlatform && !isObstacle && !isHitted)
+			anim.SetBool("IsWaiting", false);
+			if (life <= 0)
 			{
-				if (facingRight)
+				transform.GetComponent<Animator>().SetBool("IsDead", true);
+				StartCoroutine(DestroyEnemy());
+			}
+
+			isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
+			isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
+
+			if (!isHit && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
+			{
+				if (isPlatform && !isObstacle && !isHit)
 				{
-					rb.velocity = new Vector2(-speed, rb.velocity.y);
+					if (facingRight)
+					{
+						rb.velocity = new Vector2(-speed, rb.velocity.y);
+					}
+					else
+					{
+						rb.velocity = new Vector2(speed, rb.velocity.y);
+					}
 				}
 				else
 				{
-					rb.velocity = new Vector2(speed, rb.velocity.y);
+					Flip();
 				}
 			}
-			else
+		}
+		else
+        {
+			rb.velocity = new Vector2(0, 0);
+			anim.SetBool("IsWaiting", true);
+
+			if (player.transform.position.x < transform.position.x)
 			{
-				Flip();
+				Vector3 theScale = transform.localScale;
+				theScale.x = -1;
+				transform.localScale = theScale;
+				facingRight = true;
 			}
+			else if (player.transform.position.x > transform.position.x)
+			{
+				Vector3 theScale = transform.localScale;
+				theScale.x = 1;
+				transform.localScale = theScale;
+				facingRight = false;
+			}
+			//aim light and triangle at center of colliding noise circle
 		}
 	}
 
@@ -117,10 +157,10 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator HitTime()
 	{
-		isHitted = true;
+		isHit = true;
 		isInvincible = true;
 		yield return new WaitForSeconds(0.1f);
-		isHitted = false;
+		isHit = false;
 		isInvincible = false;
 	}
 
