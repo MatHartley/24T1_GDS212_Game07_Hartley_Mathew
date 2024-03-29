@@ -117,10 +117,10 @@ public class Ally : MonoBehaviour
 					StartCoroutine(Dash());
 			}
 		}
-		else 
-		{
-			enemy = GameObject.Find("DrawCharacter");
-		}
+		//else 
+		//{
+		//	enemy = GameObject.Find("DrawCharacter");
+		//}
 
 		if (transform.localScale.x * m_Rigidbody2D.velocity.x > 0 && !m_FacingRight && life > 0)
 		{

@@ -3,59 +3,119 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+	[Header("Enemy Attributes")]
 	public float life = 10;
-	private bool isPlat;
+	public float speed = 1f;
+	public bool isInvincible = false;
+
+	private bool isHit = false;
+	private bool facingRight = true; 
+	private Rigidbody2D rb;
+	private Animator anim;
+
+	[Header("Patrol Checks")]
+	public LayerMask turnLayerMask;
+
+	private bool isPlatform;
 	private bool isObstacle;
 	private Transform fallCheck;
 	private Transform wallCheck;
-	public LayerMask turnLayerMask;
-	private Rigidbody2D rb;
 
-	private bool facingRight = true;
-	
-	public float speed = 5f;
+	[Header("Alert")]
+	private float alertTime = 5f;
+	private float alertCount = 0f;
+	private bool isAlert = false;
+	private Transform alertTransform;
 
-	public bool isInvincible = false;
-	private bool isHitted = false;
+	[Header("Player Reference")]
+	[SerializeField] GameObject player;
 
-	void Awake () {
+	private void Start()
+    {
+		anim = GetComponent<Animator>();
+		player = GameObject.Find("PlayerCharacter");
+	}
+
+    void Awake () 
+	{
 		fallCheck = transform.Find("FallCheck");
 		wallCheck = transform.Find("WallCheck");
 		rb = GetComponent<Rigidbody2D>();
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
 
-		if (life <= 0) {
-			transform.GetComponent<Animator>().SetBool("IsDead", true);
-			StartCoroutine(DestroyEnemy());
-		}
-
-		isPlat = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
-		isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
-
-		if (!isHitted && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
-		{
-			if (isPlat && !isObstacle && !isHitted)
+    // Update is called once per frame
+    private void Update()
+    {
+        if (isAlert)
+        {
+			alertCount += Time.deltaTime;
+			Debug.Log(this.name + ": Alert:" + alertCount);
+			if (alertCount >= alertTime)
 			{
-				if (facingRight)
+				isAlert = false;
+				alertCount = 0f;
+			}
+        }
+    }
+
+    void FixedUpdate () 
+	{
+		if (!isAlert)
+		{
+			anim.SetBool("IsWaiting", false);
+			if (life <= 0)
+			{
+				transform.GetComponent<Animator>().SetBool("IsDead", true);
+				StartCoroutine(DestroyEnemy());
+			}
+
+			isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
+			isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
+
+			if (!isHit && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
+			{
+				if (isPlatform && !isObstacle && !isHit)
 				{
-					rb.velocity = new Vector2(-speed, rb.velocity.y);
+					if (facingRight)
+					{
+						rb.velocity = new Vector2(-speed, rb.velocity.y);
+					}
+					else
+					{
+						rb.velocity = new Vector2(speed, rb.velocity.y);
+					}
 				}
 				else
 				{
-					rb.velocity = new Vector2(speed, rb.velocity.y);
+					Flip();
 				}
 			}
-			else
+		}
+		else
+        {
+			rb.velocity = new Vector2(0, 0);
+			anim.SetBool("IsWaiting", true);
+
+			if (alertTransform.position.x < transform.position.x)
 			{
-				Flip();
+				Vector3 theScale = transform.localScale;
+				theScale.x = -1;
+				transform.localScale = theScale;
+				facingRight = true;
 			}
+			else if (alertTransform.position.x > transform.position.x)
+			{
+				Vector3 theScale = transform.localScale;
+				theScale.x = 1;
+				transform.localScale = theScale;
+				facingRight = false;
+			}
+			//aim light and triangle at center of colliding noise circle
 		}
 	}
 
-	void Flip (){
+	void Flip ()
+	{
 		// Switch the way the player is labelled as facing.
 		facingRight = !facingRight;
 		
@@ -65,7 +125,8 @@ public class Enemy : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 
-	public void ApplyDamage(float damage) {
+	public void ApplyDamage(float damage) 
+	{
 		if (!isInvincible) 
 		{
 			float direction = damage / Mathf.Abs(damage);
@@ -78,7 +139,22 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+		if (collision.gameObject.tag == "Sound")
+		{
+			isAlert = true;
+			alertTransform = player.transform;
+			alertTransform.position = player.transform.position;
+		}
+	}
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
 	{
 		if (collision.gameObject.tag == "Player" && life > 0)
 		{
@@ -88,10 +164,10 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator HitTime()
 	{
-		isHitted = true;
+		isHit = true;
 		isInvincible = true;
 		yield return new WaitForSeconds(0.1f);
-		isHitted = false;
+		isHit = false;
 		isInvincible = false;
 	}
 
