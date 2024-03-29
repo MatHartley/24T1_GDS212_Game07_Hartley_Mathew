@@ -144,9 +144,15 @@ public class Enemy : MonoBehaviour {
 		if (collision.gameObject.tag == "Sound")
 		{
 			isAlert = true;
-			alertTransform = (player.transform);
+			alertTransform = player.transform;
+			alertTransform.position = player.transform.position;
 		}
 	}
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+    }
 
     void OnCollisionStay2D(Collision2D collision)
 	{

@@ -34,12 +34,12 @@ public class PlayerMovement : MonoBehaviour
 			jump = true;
 		}
 
-		if (Input.GetKeyUp(KeyCode.Z))
-		{
-			jump = false;
-		}
+        if (Input.GetKeyUp(KeyCode.Z))
+        {
+            jump = false;
+        }
 
-		if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
 		{
 			dash = true;
 		}
