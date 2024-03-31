@@ -44,13 +44,14 @@ GameObject:
   - component: {fileID: 114435281327171648}
   - component: {fileID: 114145887554720856}
   - component: {fileID: 5462353355304353424}
+  - component: {fileID: -1213052923829054049}
   - component: {fileID: 212971026275759962}
   - component: {fileID: 95975118031919256}
   - component: {fileID: 50738830109512580}
   - component: {fileID: 70405055242815152}
   - component: {fileID: 82701611152381692}
   m_Layer: 1
-  m_Name: DrawCharacter
+  m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,6 +190,21 @@ MonoBehaviour:
   runCircle: {fileID: 4693089652342285361}
   loudCircle: {fileID: 4503530701596267432}
   playerMovement: {fileID: 114145887554720856}
+--- !u!114 &-1213052923829054049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377240496476148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b35b923d0a04040bfb85111549e290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  incomingDamage: 1
+  maxHealth: 100
+  currentHealth: 0
 --- !u!212 &212971026275759962
 SpriteRenderer:
   m_ObjectHideFlags: 0
