@@ -166,13 +166,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8644d33345e77614ba3ace9c18398d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 114231493902538710}
-  animator: {fileID: 95975118031919256}
   runSpeed: 40
+  animator: {fileID: 95975118031919256}
   jump: 0
   dash: 0
   run: 0
   sneak: 0
+  controller: {fileID: 114231493902538710}
 --- !u!114 &5462353355304353424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b80deeb90f8000439ed668285ace2c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -62,37 +62,44 @@ public class Enemy : MonoBehaviour {
 	{
 		if (!isAlert)
 		{
-			anim.SetBool("IsWaiting", false);
-			if (life <= 0)
+			if (speed == 0)
 			{
-				transform.GetComponent<Animator>().SetBool("IsDead", true);
-				StartCoroutine(DestroyEnemy());
+				anim.SetBool("IsWaiting", true);
 			}
-
-			isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
-			isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
-
-			if (!isHit && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
+			else
 			{
-				if (isPlatform && !isObstacle && !isHit)
+				anim.SetBool("IsWaiting", false);
+				if (life <= 0)
 				{
-					if (facingRight)
+					transform.GetComponent<Animator>().SetBool("IsDead", true);
+					StartCoroutine(DestroyEnemy());
+				}
+
+				isPlatform = Physics2D.OverlapCircle(fallCheck.position, .2f, 1 << LayerMask.NameToLayer("Default"));
+				isObstacle = Physics2D.OverlapCircle(wallCheck.position, .2f, turnLayerMask);
+
+				if (!isHit && life > 0 && Mathf.Abs(rb.velocity.y) < 0.5f)
+				{
+					if (isPlatform && !isObstacle && !isHit)
 					{
-						rb.velocity = new Vector2(-speed, rb.velocity.y);
+						if (facingRight)
+						{
+							rb.velocity = new Vector2(-speed, rb.velocity.y);
+						}
+						else
+						{
+							rb.velocity = new Vector2(speed, rb.velocity.y);
+						}
 					}
 					else
 					{
-						rb.velocity = new Vector2(speed, rb.velocity.y);
+						Flip();
 					}
-				}
-				else
-				{
-					Flip();
 				}
 			}
 		}
 		else
-        {
+		{
 			rb.velocity = new Vector2(0, 0);
 			anim.SetBool("IsWaiting", true);
 
