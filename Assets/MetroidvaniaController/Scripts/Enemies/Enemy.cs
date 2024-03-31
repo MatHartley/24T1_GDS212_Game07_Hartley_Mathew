@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour {
         if (isAlert)
         {
 			alertCount += Time.deltaTime;
-			Debug.Log(this.name + ": Alert:" + alertCount);
+			//Debug.Log(this.name + ": Alert:" + alertCount);
 			if (alertCount >= alertTime)
 			{
 				isAlert = false;
