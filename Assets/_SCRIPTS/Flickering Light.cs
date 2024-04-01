@@ -18,7 +18,7 @@ public class FlickeringLight : MonoBehaviour
     void Start()
     {
         lightBeam = this.transform.GetChild(0).gameObject;
-        Debug.Log("Hello" + lightBeam.name);
+        //Debug.Log("Hello " + lightBeam.name);
     }
 
     // Update is called once per frame
