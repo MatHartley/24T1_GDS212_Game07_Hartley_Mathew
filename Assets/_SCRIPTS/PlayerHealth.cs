@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] float maxHealth;
     [SerializeField] float currentHealth;
     private bool isTakingDamage;
+
+    [SerializeField] Slider healthSlider;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,8 @@ public class PlayerHealth : MonoBehaviour
             currentHealth -= (incomingDamage * Time.deltaTime);
             Debug.Log(currentHealth + "/" + maxHealth);
         }
+
+        healthSlider.value = currentHealth;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
