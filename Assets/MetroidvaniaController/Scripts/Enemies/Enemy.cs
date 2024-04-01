@@ -30,9 +30,13 @@ public class Enemy : MonoBehaviour {
 	[Header("Player Reference")]
 	[SerializeField] GameObject player;
 
+	[Header("Internals")]
+	private GameObject lightBeam;
+
 	private void Start()
     {
 		anim = GetComponent<Animator>();
+		lightBeam = this.transform.GetChild(0).gameObject;
 		player = GameObject.Find("PlayerCharacter");
 	}
 
@@ -46,7 +50,12 @@ public class Enemy : MonoBehaviour {
     // Update is called once per frame
     private void Update()
     {
-        if (isAlert)
+		if (life <= 0)
+		{
+			StartCoroutine(DestroyEnemy());
+		}
+
+		if (isAlert)
         {
 			alertCount += Time.deltaTime;
 			//Debug.Log(this.name + ": Alert:" + alertCount);
@@ -180,13 +189,15 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator DestroyEnemy()
 	{
+		lightBeam.SetActive(false);
 		CapsuleCollider2D capsule = GetComponent<CapsuleCollider2D>();
 		capsule.size = new Vector2(1f, 0.25f);
 		capsule.offset = new Vector2(0f, -0.8f);
 		capsule.direction = CapsuleDirection2D.Horizontal;
+		transform.GetComponent<Animator>().SetBool("IsDead", true);
 		yield return new WaitForSeconds(0.25f);
 		rb.velocity = new Vector2(0, rb.velocity.y);
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1f);
 		Destroy(gameObject);
 	}
 }
