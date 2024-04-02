@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
     [SerializeField] GameObject assassinTarget;
     [SerializeField] GameObject[] potentialTargets;
     [SerializeField] GameObject assassinPortrait;

@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] float incomingDamage;
     [SerializeField] float maxHealth;
     [SerializeField] float currentHealth;
-    private bool isTakingDamage;
+    public bool isTakingDamage;
 
     [SerializeField] Slider healthSlider;
 
@@ -28,22 +28,5 @@ public class PlayerHealth : MonoBehaviour
         }
 
         healthSlider.value = currentHealth;
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.tag == "LightDamage")
-        {
-            isTakingDamage = true;
-            Debug.Log("In Light");
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.tag == "LightDamage")
-        {
-            isTakingDamage = false;
-        }
     }
 }
