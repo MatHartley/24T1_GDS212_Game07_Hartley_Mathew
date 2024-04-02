@@ -126,7 +126,6 @@ public class Enemy : MonoBehaviour {
 				transform.localScale = theScale;
 				facingRight = false;
 			}
-			//aim light and triangle at center of colliding noise circle
 		}
 	}
 
@@ -160,8 +159,9 @@ public class Enemy : MonoBehaviour {
 		if (collision.gameObject.tag == "Sound")
 		{
 			isAlert = true;
-			alertTransform = player.transform;
-			alertTransform.position = player.transform.position;
+			alertTransform = collision.transform;
+			alertTransform.position = collision.transform.position;
+			Debug.Log(collision.transform.position);
 		}
 	}
 

@@ -1329,6 +1329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 154751655}
   - component: {fileID: 154751654}
+  - component: {fileID: 154751656}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1371,6 +1372,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &154751656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154751653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92c618b9d074e946aa7472010756b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sneakCircle: {fileID: 0}
+  runCircle: {fileID: 0}
+  loudCircle: {fileID: 0}
+  playerMovement: {fileID: 1675751956}
 --- !u!4 &166553603 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2156806660967379778, guid: 02ddac021bc59ff46af85700dfe51a56, type: 3}
@@ -7454,6 +7471,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4660076192433278, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
   m_PrefabInstance: {fileID: 1781186959}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1675751956 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114145887554720856, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+  m_PrefabInstance: {fileID: 1781186959}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8644d33345e77614ba3ace9c18398d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1678284769
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8300,12 +8328,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114145887554720856, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: audioEmission
+      value: 
+      objectReference: {fileID: 154751656}
+    - target: {fileID: 114145887554720856, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: audioTimerReset
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 114435281327171648, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
       propertyPath: cam
       value: 
       objectReference: {fileID: 1836044734}
+    - target: {fileID: 5462353355304353424, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462353355304353424, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: runCircle
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462353355304353424, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: loudCircle
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462353355304353424, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+      propertyPath: sneakCircle
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4503530701596267432, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+    - {fileID: 4693089652342285361, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
+    - {fileID: 3646533730847005607, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4660076192433278, guid: 50936cccdb69523458c1b42052ebafff, type: 3}
       insertIndex: -1

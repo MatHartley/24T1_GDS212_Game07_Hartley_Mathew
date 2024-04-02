@@ -15,6 +15,8 @@ public class AudioEmission : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (sneakCircle == null) return;
+
         if (playerMovement.sneak)
         {
             sneakCircle.SetActive(true);

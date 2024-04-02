@@ -14,17 +14,36 @@ public class PlayerMovement : MonoBehaviour
 	public bool dash = false;
 	public bool run = false;
 	public bool sneak = false;
+	private Transform alertTransform;
+
+	private int alertX;
+	private int alertY;
+	private int alertZ;
 
 	[Header("Audio Emission")]
-	private float audioCooldown = 1f;
-	private float audioCount;
+	[SerializeField] private float audioTimerReset = 1f;
+	/// <summary>
+	/// Should countdown
+	/// </summary>
+	private float audioTimer;
+	[SerializeField] private GameObject sneakCircle;
+	[SerializeField] private GameObject runCircle;
+	[SerializeField] private GameObject loudCircle;
 
 	[Header("Script References")]
 	public CharacterController2D controller;
+	public AudioEmission audioEmission;
+
+    private void Start()
+    {
+
+    }
 
     // Update is called once per frame
     void Update()
 	{
+		audioTimer -= Time.deltaTime;
+
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
 		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
@@ -32,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			jump = true;
+			AlertCircle(loudCircle);
 		}
 
         if (Input.GetKeyUp(KeyCode.Z))
@@ -42,11 +62,23 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
 		{
 			dash = true;
+			AlertCircle(loudCircle);
 		}
 
 		if (Input.GetKeyUp(KeyCode.C))
 		{
 			dash = false;		
+		}
+	}
+	
+	private void AlertCircle(GameObject alert)
+	{
+		if (audioTimer <= 0)
+		{
+			alertTransform = (this.transform);
+			GameObject thisAlert = Instantiate(alert, transform.position, Quaternion.identity);
+			Destroy(thisAlert, 1);
+			audioTimer = audioTimerReset;
 		}
 	}
 
@@ -68,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
 		if (horizontalMove != 0)
 		{
 			run = true;
+			AlertCircle(runCircle);
 		}
 		else
 		{
