@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ApplyDamage : MonoBehaviour
 {
-    [SerializeField] PlayerHealth playerHealth;
+    [SerializeField] private PlayerHealth playerHealth;
 
     //Start is called before the first frame update
     void Start()
@@ -18,7 +18,7 @@ public class ApplyDamage : MonoBehaviour
         if (collision.tag == "Player")
         {
             playerHealth.isTakingDamage = true;
-            Debug.Log("In Light");
+            //Debug.Log("In Light");
         }
     }
 

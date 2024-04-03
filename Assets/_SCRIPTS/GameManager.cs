@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         targetIndex = Random.Range(0, potentialTargets.Length);
         assassinTarget = potentialTargets[targetIndex];
         assassinPortrait = potentialPortraits[targetIndex];
@@ -55,5 +56,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         winPanel.SetActive(true);
         deadTarget.SetActive(true);
+        Cursor.visible = true;
     }
 }

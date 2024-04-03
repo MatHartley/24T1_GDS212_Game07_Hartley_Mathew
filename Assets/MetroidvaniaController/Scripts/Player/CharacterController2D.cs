@@ -41,6 +41,8 @@ public class CharacterController2D : MonoBehaviour
 	private float jumpWallDistX = 0; //Distance between player and wall
 	private bool limitVelOnWallJump = false; //For limit wall jump distance with low fps
 
+
+	[SerializeField] private AudioSource playerDeath;
 	[Header("Events")]
 	[Space]
 
@@ -52,6 +54,7 @@ public class CharacterController2D : MonoBehaviour
 
 	private void Awake()
 	{
+		playerDeath = GameObject.Find("PlayerDieSFX").GetComponent<AudioSource>();
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
 
@@ -331,6 +334,7 @@ public class CharacterController2D : MonoBehaviour
 
 	IEnumerator WaitToDead()
 	{
+		playerDeath.Play();
 		animator.SetBool("IsDead", true);
 		canMove = false;
 		invincible = true;

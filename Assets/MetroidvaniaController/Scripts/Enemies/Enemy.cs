@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 	public float life = 10;
 	public float speed = 1f;
 	public bool isInvincible = false;
+	[SerializeField] private AudioSource enemyDeath;
 
 	private bool isHit = false;
 	private bool facingRight = true; 
@@ -22,8 +23,10 @@ public class Enemy : MonoBehaviour {
 	private Transform wallCheck;
 
 	[Header("Alert")]
-	private float alertTime = 5f;
-	private float alertCount = 0f;
+	[SerializeField] private AudioSource alertSFX;
+	[SerializeField] private float alertCooldownTime = 5f;
+
+	private float alertTimer = 0f;
 	private bool isAlert = false;
 	private Transform alertTransform;
 
@@ -34,6 +37,8 @@ public class Enemy : MonoBehaviour {
     {
 		anim = GetComponent<Animator>();
 		lightBeam = this.transform.GetChild(0).gameObject;
+		enemyDeath = GameObject.Find("EnemyDieSFX").GetComponent<AudioSource>();
+		alertSFX = gameObject.GetComponent<AudioSource>();
 	}
 
     void Awake () 
@@ -53,12 +58,12 @@ public class Enemy : MonoBehaviour {
 
 		if (isAlert)
         {
-			alertCount += Time.deltaTime;
+			alertTimer += Time.deltaTime;
 			//Debug.Log(this.name + ": Alert:" + alertCount);
-			if (alertCount >= alertTime)
+			if (alertTimer >= alertCooldownTime)
 			{
 				isAlert = false;
-				alertCount = 0f;
+				alertTimer = 0f;
 			}
         }
     }
@@ -107,20 +112,22 @@ public class Enemy : MonoBehaviour {
 		{
 			rb.velocity = new Vector2(0, 0);
 			anim.SetBool("IsWaiting", true);
-
-			if (alertTransform.position.x < transform.position.x)
+			if (alertTransform != null)
 			{
-				Vector3 theScale = transform.localScale;
-				theScale.x = -1;
-				transform.localScale = theScale;
-				facingRight = true;
-			}
-			else if (alertTransform.position.x > transform.position.x)
-			{
-				Vector3 theScale = transform.localScale;
-				theScale.x = 1;
-				transform.localScale = theScale;
-				facingRight = false;
+				if (alertTransform.position.x < transform.position.x)
+				{
+					Vector3 theScale = transform.localScale;
+					theScale.x = -1;
+					transform.localScale = theScale;
+					facingRight = true;
+				}
+				else if (alertTransform.position.x > transform.position.x)
+				{
+					Vector3 theScale = transform.localScale;
+					theScale.x = 1;
+					transform.localScale = theScale;
+					facingRight = false;
+				}
 			}
 		}
 	}
@@ -156,6 +163,10 @@ public class Enemy : MonoBehaviour {
 		{
 			if (collision.gameObject.tag == "Sound")
 			{
+				if (!isAlert)
+				{
+					alertSFX.Play();
+				}
 				isAlert = true;
 				alertTransform = collision.transform;
 				alertTransform.position = collision.transform.position;
@@ -188,6 +199,7 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator DestroyEnemy()
 	{
+		enemyDeath.Play(); 
 		lightBeam.SetActive(false);
 		CapsuleCollider2D capsule = GetComponent<CapsuleCollider2D>();
 		capsule.size = new Vector2(1f, 0.25f);
