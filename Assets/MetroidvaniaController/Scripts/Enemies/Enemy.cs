@@ -27,9 +27,6 @@ public class Enemy : MonoBehaviour {
 	private bool isAlert = false;
 	private Transform alertTransform;
 
-	[Header("Player Reference")]
-	[SerializeField] GameObject player;
-
 	[Header("Internals")]
 	private GameObject lightBeam;
 
@@ -37,7 +34,6 @@ public class Enemy : MonoBehaviour {
     {
 		anim = GetComponent<Animator>();
 		lightBeam = this.transform.GetChild(0).gameObject;
-		player = GameObject.Find("PlayerCharacter");
 	}
 
     void Awake () 
@@ -154,14 +150,17 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-		if (collision.gameObject.tag == "Sound")
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.gameObject != null)
 		{
-			isAlert = true;
-			alertTransform = collision.transform;
-			alertTransform.position = collision.transform.position;
-			Debug.Log(collision.transform.position);
+			if (collision.gameObject.tag == "Sound")
+			{
+				isAlert = true;
+				alertTransform = collision.transform;
+				alertTransform.position = collision.transform.position;
+				Debug.Log(collision.transform.position);
+			}
 		}
 	}
 

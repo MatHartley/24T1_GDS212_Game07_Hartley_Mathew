@@ -28,7 +28,7 @@ public class FlickeringLight : MonoBehaviour
         {
             lightBeam.SetActive(false);
             offCount += Time.deltaTime;
-            if (offCount >= offTime)
+            if (offCount >= Random.Range (0, offTime))
             {
                 isOn = true;
                 onCount = 0;

@@ -73,6 +73,10 @@ public class PlayerMovement : MonoBehaviour
 	
 	private void AlertCircle(GameObject alert)
 	{
+		if (alert.gameObject.name == "loudCircle")
+        {
+			audioTimer = 0;
+        }
 		if (audioTimer <= 0)
 		{
 			alertTransform = (this.transform);
